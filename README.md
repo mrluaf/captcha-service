@@ -9,8 +9,14 @@
 ## Installation
 
 Via npm:
+```sh
+npm i -S captcha-service
+```
 
-	npm i -S captcha-service
+Update via npm:
+```sh
+npm update captcha-service
+```
 
 ## Usage
 
