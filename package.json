@@ -1,10 +1,11 @@
 {
   "name": "captcha-service",
-  "version": "1.0.0",
-  "description": "Lib support solve captcha with 2captcha, anticaptcha, deathcaptcha, azcaprcha and ...",
+  "version": "1.0.1",
+  "description": "Lib support to solve 2D captcha with 2captcha, anticaptcha, deathcaptcha, azcaptcha and ...",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
@@ -20,10 +21,19 @@
     "captcha",
     "solver"
   ],
-  "author": "nguyenvantai.vn",
-  "license": "ISC",
+  "author": "Nguyen Van Tai <nguyenvantai.vn>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/mrluaf/captcha-service/issues"
   },
-  "homepage": "https://github.com/mrluaf/captcha-service#readme"
+  "homepage": "https://github.com/mrluaf/captcha-service#readme",
+  "dependencies": {
+    "@infosimples/node_two_captcha": "^1.1.0",
+    "bluebird": "^3.7.2",
+    "dotenv": "^10.0.0",
+    "image-to-base64": "^2.2.0",
+    "is-base64": "^1.1.0",
+    "request": "^2.88.2"
+  }
 }
