@@ -15,7 +15,7 @@ Via npm:
 ## Usage
 
 ```js
-const CaptchaService = require('../index');
+const CaptchaService = require('captcha-service');
 
 const solver = new CaptchaService({
   captcha_service: "twocaptcha",
@@ -61,13 +61,9 @@ To solve captcha
 - Github: [@mrluaf](https://github.com/mrluaf)
 - Gitlab: [@mrluaf](https://gitlab.com/mrluaf)
 
-## License
-
-Copyright © 2021 [Văn Tài](https://nguyenvantai.vn).<br />
-
 ---
 
-_Made with ❤️ by [Văn Tài](https://nguyenvantai.vn)_
+Made with ❤️ by [Văn Tài](https://nguyenvantai.vn)
 
 [axnode]: #accessibilitysnapshotoptions 'AXNode'
 [accessibility]: #class-accessibility 'Accessibility'
