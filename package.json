@@ -1,0 +1,29 @@
+{
+  "name": "captcha-service",
+  "version": "1.0.0",
+  "description": "Lib support solve captcha with 2captcha, anticaptcha, deathcaptcha, azcaprcha and ...",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrluaf/captcha-service.git"
+  },
+  "keywords": [
+    "2captcha",
+    "anticaptcha",
+    "deathcaptcha",
+    "azcaptcha",
+    "captcha",
+    "service",
+    "captcha",
+    "solver"
+  ],
+  "author": "nguyenvantai.vn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrluaf/captcha-service/issues"
+  },
+  "homepage": "https://github.com/mrluaf/captcha-service#readme"
+}
