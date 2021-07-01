@@ -19,7 +19,17 @@
     "captcha",
     "service",
     "captcha",
-    "solver"
+    "solver",
+    "captcha service",
+    "captcha solver",
+    "2captcha solver",
+    "anticaptcha solver",
+    "deathcaptcha solver",
+    "deathcaptcha solver",
+    "azcaptcha solver",
+    "bypasscaptcha",
+    "captchaservice",
+    "captcha solver in one"
   ],
   "author": "Nguyen Van Tai <nguyenvantai.vn>",
   "license": "MIT",
@@ -33,7 +43,6 @@
     "bluebird": "^3.7.2",
     "dotenv": "^10.0.0",
     "image-to-base64": "^2.2.0",
-    "is-base64": "^1.1.0",
     "request": "^2.88.2"
   }
 }

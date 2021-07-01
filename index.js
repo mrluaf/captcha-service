@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const imageToBase64 = require('image-to-base64');
 const stream = require('stream');
-const isBase64 = require('is-base64');
 const BPromise = require('bluebird');
 
 class CapchaService {
