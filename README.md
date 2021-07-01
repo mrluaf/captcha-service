@@ -10,7 +10,7 @@
 
 Via npm:
 
-	npm install captcha-service
+	npm i -S captcha-service
 
 ## Usage
 
