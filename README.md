@@ -61,7 +61,7 @@ To solve captcha
 - Github: [@mrluaf](https://github.com/mrluaf)
 - Gitlab: [@mrluaf](https://gitlab.com/mrluaf)
 
-## 📝 License
+## License
 
 Copyright © 2021 [Văn Tài](https://nguyenvantai.vn).<br />
 
