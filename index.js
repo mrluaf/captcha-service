@@ -35,6 +35,7 @@ class CapchaService {
       case 'anticaptcha':
         this.solver = require(path.normalize(__dirname + '/./services/solveCaptchaWithAnti'));
         this.solver.setApiKey(this.captcha_key[0]);
+        this.solver.Stream.on('log', data => this.Stream.emit('log', data));
         break;
       case 'deathbycaptcha':
         this.solver = require(path.normalize(__dirname + '/./services/deathbycaptcha2'));

@@ -1,6 +1,6 @@
 {
   "name": "captcha-service",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Lib support to solve 2D captcha with 2captcha, anticaptcha, deathcaptcha, azcaptcha and ...",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,9 @@
     "azcaptcha solver",
     "bypasscaptcha",
     "captchaservice",
-    "captcha solver in one"
+    "captcha solver in one",
+    "captcha-service",
+    "captcha-solver"
   ],
   "author": "Nguyen Van Tai <nguyenvantai.vn>",
   "license": "MIT",

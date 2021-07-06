@@ -2,7 +2,7 @@ require('dotenv').config();
 const CaptchaService = require('../index');
 
 const solver = new CaptchaService({
-  captcha_service: "twocaptcha",
+  captcha_service: process.env.SERVICE || "twocaptcha",
   captcha_key: process.env.KEY || "captcha_key",
   imageCaptchaPath: "./img.png",
   renameImage: false

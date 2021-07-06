@@ -1,3 +1,4 @@
+const stream = require('stream');
 var Anticaptcha = function (clientKey) {
   return new function (clientKey) {
     this.params = {
@@ -45,6 +46,8 @@ var Anticaptcha = function (clientKey) {
       softId: null,
       languagePool: null
     };
+
+    this.Stream = new stream.Stream();
 
     var connectionTimeout = 20,
       firstAttemptWaitingInterval = 5,
@@ -152,7 +155,7 @@ var Anticaptcha = function (clientKey) {
       }
     }
 
-    this.getTaskSolution = function (taskId, cb, currentAttempt, tickCb) {
+    this.getTaskSolution = (taskId, cb, currentAttempt, tickCb) => {
       currentAttempt = currentAttempt || 0;
 
       var postData = {
@@ -167,7 +170,8 @@ var Anticaptcha = function (clientKey) {
         waitingInterval = normalWaitingInterval;
       }
 
-      console.log('Waiting %s seconds', waitingInterval);
+      // console.log('Waiting %s seconds', waitingInterval);
+      this.Stream.emit('log', `Waiting ${waitingInterval} seconds`);
 
       var that = this;
 
@@ -307,7 +311,7 @@ var Anticaptcha = function (clientKey) {
 
     };
 
-    this.jsonPostRequest = function (methodName, postData, cb) {
+    this.jsonPostRequest = (methodName, postData, cb) => {
       if (typeof process === 'object' && typeof require === 'function') { // NodeJS
         var http = require('http');
 
@@ -328,7 +332,7 @@ var Anticaptcha = function (clientKey) {
         // console.log(options);
         // console.log(JSON.stringify(postData));
 
-        var req = http.request(options, function (response) { // on response
+        var req = http.request(options, (response) => { // on response
           var str = '';
 
           // another chunk of data has been recieved, so append it to `str`
@@ -337,8 +341,9 @@ var Anticaptcha = function (clientKey) {
           });
 
           // the whole response has been recieved, so we just print it out here
-          response.on('end', function () {
-            console.log(str);
+          response.on('end', () => {
+            // console.log(str);
+            this.Stream.emit('log', `${str}`);
 
             try {
               var jsonResult = JSON.parse(str);
@@ -360,14 +365,16 @@ var Anticaptcha = function (clientKey) {
 
         // timeout in milliseconds
         req.setTimeout(connectionTimeout * 1000);
-        req.on('timeout', function () {
-          console.log('timeout');
+        req.on('timeout', () => {
+          // console.log('timeout');
+          this.Stream.emit('log', `timeout`);
           req.abort();
         });
 
         // After timeout connection throws Error, so we have to handle it
-        req.on('error', function (err) {
-          console.log('error');
+        req.on('error', (err) => {
+          // console.log('error');
+          this.Stream.emit('log', `error`);
           return cb(err);
         });
 

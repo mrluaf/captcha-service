@@ -1,12 +1,16 @@
 const path = require('path');
+const stream = require('stream');
 const Anticaptcha = require(path.normalize(__dirname + '/./anticaptcha'));
 
 var client = null;
+var Stream = new stream.Stream();
 
+module.exports.Stream = Stream;
 
 module.exports.setApiKey = function(key) {
   client = Anticaptcha(key);
   client.setMinLength(3);
+  client.Stream.on('log', data => Stream.emit('log', data));
 };
 
 module.exports.balanceZero = (callback) => {

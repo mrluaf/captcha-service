@@ -48,7 +48,11 @@ solver.solveCaptcha().then(text => {
 ## API
 ### CaptchaService([options])
 - `options` <[Object]>
-  - `captcha_service` <[string]> Has support: azcaptcha, twocaptcha, anticaptcha, deathbycaptcha **(require)**
+  - `captcha_service` <[string]> Has support: **(require)**
+    - azcaptcha
+    - twocaptcha
+    - anticaptcha
+    - deathbycaptcha
   - `captcha_key` <[string]|[Array]<[string]>> API KEY of captcha service. Example: `["KEY1", "KEY2"]` or just a single key `"KEY1"` or `["KEY1"]`
   - `imageCaptchaPath` <[string]|path> Captcha image file address
   - renameImage <[boolean]> `Default: false` Whether to rename captcha image file affter solved with the filename as the result of the captcha.
