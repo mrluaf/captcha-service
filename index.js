@@ -48,15 +48,18 @@ class CapchaService {
     }
 
   }
-  changeCaptchaImageFileName(solvedCaptchaString) {
+  changeCaptchaImageFileName(solvedCaptchaString, imageCaptchaPath) {
     return new Promise((resolve, reject) => {
       try {
-        const imageExtname = path.extname(this.captchaFileName);
-        this.Stream.emit('log', `Changing captcha file name: ${this.captchaFileName}`);
+        solvedCaptchaString = solvedCaptchaString || this.solvedCaptchaString || '';
+        imageCaptchaPath = path.resolve(imageCaptchaPath || this.imageCaptchaPath);
+        const captchaFileName = path.basename(imageCaptchaPath);
+        const imageExtname = path.extname(captchaFileName);
+        this.Stream.emit('log', `Changing captcha file name: ${captchaFileName}`);
 
-        const captcha_folder = path.dirname(this.imageCaptchaPath);
+        const captcha_folder = path.dirname(imageCaptchaPath);
         let RecaptchaFileName = path.format({
-          name: solvedCaptchaString || (this.solvedCaptchaString || '').trim() || 'captcha',
+          name: solvedCaptchaString.trim() || 'captcha',
           ext: imageExtname
         });
         let imageCaptchaPathRename = path.format({
@@ -64,9 +67,9 @@ class CapchaService {
           base: RecaptchaFileName
         }) || './captcha.jpg';
 
-        fs.renameSync(this.imageCaptchaPath, imageCaptchaPathRename);
+        fs.renameSync(imageCaptchaPath, imageCaptchaPathRename);
 
-        this.Stream.emit('log', `Captcha file name has been changed: from ${this.captchaFileName} --> ${RecaptchaFileName}`);
+        this.Stream.emit('log', `Captcha file name has been changed: from ${captchaFileName} --> ${RecaptchaFileName}`);
       } catch (e) {
         this.Stream.emit('log', `Change Captcha File Name ERROR: ${e.message}`);
       } finally {

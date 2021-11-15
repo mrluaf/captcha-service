@@ -1,6 +1,6 @@
 {
   "name": "captcha-service",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Lib support to solve 2D captcha with 2captcha, anticaptcha, deathcaptcha, azcaptcha and ...",
   "main": "index.js",
   "scripts": {
