@@ -113,6 +113,10 @@ var Anticaptcha = function (clientKey) {
       this.createTask(cb, 'HCaptchaTask');
     };
 
+    this.createRecaptchaV2TaskProxyless = function (taskData, cb) {
+      this.createTask(cb, 'RecaptchaV2TaskProxyless', taskData);
+    };
+    
     this.createRecaptchaV3TaskProxyless = function (cb) {
       this.createTask(cb, 'RecaptchaV3TaskProxyless');
     };
@@ -245,9 +249,15 @@ var Anticaptcha = function (clientKey) {
         case 'RecaptchaV3TaskProxyless':
           return {
             websiteURL: this.params.websiteUrl,
-              websiteKey: this.params.websiteKey,
-              minScore: this.params.minScore,
-              pageAction: this.params.pageAction,
+            websiteKey: this.params.websiteKey,
+            minScore: this.params.minScore,
+            pageAction: this.params.pageAction,
+          };
+          break;
+        case 'RecaptchaV2TaskProxyless':
+          return {
+            websiteURL: this.params.websiteUrl,
+            websiteKey: this.params.websiteKey,
           };
           break;
         case 'FunCaptchaTask':

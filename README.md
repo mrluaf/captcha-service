@@ -53,6 +53,11 @@ solver.solveCaptcha().then(text => {
     - twocaptcha
     - anticaptcha
     - deathbycaptcha
+  - `captchaType` <[string]> Has support: `Default: "image"` 
+    - image
+    - recaptchav2
+  - `websiteURL` <[string]> For Recaptcha: Website URL
+  - `websiteKey` <[string]> For Recaptcha: recaptcha website key
   - `captcha_key` <[string]|[Array]<[string]>> API KEY of captcha service. Example: `["KEY1", "KEY2"]` or just a single key `"KEY1"` or `["KEY1"]`
   - `imageCaptchaPath` <[string]|path> Captcha image file address
   - renameImage <[boolean]> `Default: false` Whether to rename captcha image file affter solved with the filename as the result of the captcha.
@@ -61,6 +66,10 @@ solver.solveCaptcha().then(text => {
 ### .solveCaptcha()
 To solve captcha
 - return: <[string]> Text from image captcha
+
+### .solveRecapchaV2()
+To solve captcha
+- return: <[string]> gRecaptchaResponse
 
 ## Author
 

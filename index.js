@@ -3,6 +3,7 @@ const path = require('path');
 const imageToBase64 = require('image-to-base64');
 const stream = require('stream');
 const BPromise = require('bluebird');
+const get = require('lodash/get');
 
 class CapchaService {
   constructor(extra_options = {}) {
@@ -11,15 +12,31 @@ class CapchaService {
       captcha_service,
       captcha_key,
       imageCaptchaPath,
-      renameImage
+      renameImage,
+      captchaType,
+      websiteURL,
+      websiteKey,
     } = extra_options;
-
-    if (!imageCaptchaPath) throw new Error('Please input imageCaptchaPath');
-    if (!captcha_key) throw new Error('captcha_key missing');
-
-    this.renameImage = (typeof(renameImage) === "boolean")?renameImage:false;
-    this.imageCaptchaPath = path.resolve(imageCaptchaPath);
-    this.captchaFileName = path.basename(this.imageCaptchaPath);
+    this.captchaType = captchaType ? captchaType : 'image';
+    switch (captchaType) {
+      case 'image':
+        if (!imageCaptchaPath) throw new Error('Please input imageCaptchaPath');
+        if (!captcha_key) throw new Error('captcha_key missing');
+        this.imageCaptchaPath = path.resolve(imageCaptchaPath);
+        this.captchaFileName = path.basename(this.imageCaptchaPath);
+        this.renameImage = (typeof(renameImage) === "boolean")?renameImage:false;
+        break;
+      case 'recaptchav2':
+        if (!websiteURL) throw new Error('Please input websiteURL');
+        if (!websiteKey) throw new Error('Please input websiteKey');
+        this.websiteURL = websiteURL;
+        this.websiteKey = websiteKey;
+        break;
+    
+      default:
+        throw new Error(`Captcha type: ${captchaType} is not supported`);
+        break;
+    }
     this.captcha_service = captcha_service || 'twocaptcha';
     this.captcha_key = (typeof (captcha_key) == "object") ? captcha_key || [''] : [captcha_key || ''];
     
@@ -167,21 +184,88 @@ class CapchaService {
       }
     });
   }
+  solveRecapchaV2(captcha_index = 0) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.Stream.emit('log', `Solve captcha with captcha_index: ${captcha_index}`);
+        this.solver.balanceZero(async (err, isZero) => {
+          if (err) return reject(err);
+          try {
+            if (isZero == true) {
+              if (captcha_index == (this.captcha_key.length - 1)) {
+                reject(new Error(`ERROR_USER_BALANCE_ZERO`));
+              } else {
+                this.solver.setApiKey(this.captcha_key[captcha_index + 1]);
+                this.solveRecapchaV2(captcha_index + 1).then(data => resolve(data)).catch(err => reject(err));
+              }
+            } else {
+              switch (this.captcha_service) {
+                case 'anticaptcha':
+                  try {
+                    this.solver.solveRecaptchaV2({
+                      websiteKey: this.websiteKey,
+                      websiteURL: this.websiteURL,
+                    }, (err, result) => {
+                      if (err) {
+                        reject(new Error(`anticaptcha Error: ${(err || '').toString()}`));
+                      } else {
+                        this.Stream.emit('log', `anticaptcha: ${JSON.stringify(result)}`);
+                        resolve(result.text || '');
+                      }
+                    });
+                  } catch (err) {
+                    reject(err);
+                  } finally {
+                    break;
+                  }
+
+                default:
+                  reject(new Error(`ERROR_CAPTCHA_SERVICE_NOT_SUPPORTED`));
+                  break;
+              }
+
+            }
+          } catch (e) {
+            reject(e);
+          }
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
   solveCaptcha(trytime = 1) {
     return new Promise(async (resolve, reject) => {
       try {
-        this.Stream.emit('log', `Solving captcha trytime=${trytime}`);
-        this.solvedCaptchaString = await this.solveCaptchaWithCaptchaService();
-        this.Stream.emit('log', `Captcha result: ${this.solvedCaptchaString} | ${this.captchaFileName}`);
-        if (this.renameImage) await this.changeCaptchaImageFileName();
-        resolve(this.solvedCaptchaString);
+        this.Stream.emit('log', `Solving ${this.captchaType} captcha trytime=${trytime}`);
+        let response = null;
+        switch (this.captchaType) {
+          case 'image':
+            this.solvedCaptchaString = await this.solveCaptchaWithCaptchaService();
+            this.Stream.emit('log', `Captcha result: ${this.solvedCaptchaString} | ${this.captchaFileName}`);
+            if (this.renameImage) await this.changeCaptchaImageFileName();
+            response = this.solvedCaptchaString;
+            break;
+          case 'recaptchav2': {
+            const solvedCaptchaString = await this.solveRecapchaV2();
+            this.Stream.emit('log', `Captcha result: ${solvedCaptchaString}`);
+            response = solvedCaptchaString;
+            break;
+          }
+          
+          default:
 
+            break;
+        }
+
+        resolve(response);
       } catch (err) {
-        
-        this.Stream.emit('log', `Captcha error: ${err.message}`);
-        if (err.message.includes('ERROR_USER_BALANCE_ZERO')) {
+        const errMsg = get(err, 'message', String(err));
+        this.Stream.emit('log', `Captcha error: ${errMsg}`);
+        if (errMsg.includes('ERROR_USER_BALANCE_ZERO')) {
           reject(err);
-        } else if (err.message.includes('ERROR_WRONG_USER_KEY')) {
+        } else if (errMsg.includes('ERROR_WRONG_USER_KEY')) {
           reject(err);
         } else {
           if (trytime == 0) {

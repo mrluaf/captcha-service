@@ -48,3 +48,27 @@ module.exports.decode = (captchaBASE64, callback) => {
       });
     });
 }
+module.exports.solveRecaptchaV2 = (inputs = {}, callback) => {
+  const { websiteKey, websiteURL } = inputs;
+  if (!websiteKey) callback('websiteKey is required', null);
+  if (!websiteURL) callback('websiteURL is required', null);
+  client.createRecaptchaV2TaskProxyless({
+    websiteURL,
+    websiteKey,
+  }, (err, taskId) => {
+    if (err) {
+      callback(err, null);
+    }
+
+    // console.log('taskId:', taskId);
+
+    client.getTaskSolution(taskId, function (err, taskSolution) {
+      if (err) {
+        callback(err, null);
+      }
+
+      // console.log('taskSolution:', taskSolution);
+      callback(null, {text: taskSolution});
+    });
+  });
+}
