@@ -4,6 +4,7 @@ const CaptchaService = require('../index');
 const solver = new CaptchaService({
   captcha_service: process.env.SERVICE || "twocaptcha",
   captcha_key: process.env.KEY || "captcha_key",
+  captchaType: "image",
   imageCaptchaPath: "./img.png",
   renameImage: false
 });

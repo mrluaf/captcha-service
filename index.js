@@ -18,7 +18,7 @@ class CapchaService {
       websiteKey,
     } = extra_options;
     this.captchaType = captchaType ? captchaType : 'image';
-    switch (captchaType) {
+    switch (this.captchaType) {
       case 'image':
         if (!imageCaptchaPath) throw new Error('Please input imageCaptchaPath');
         if (!captcha_key) throw new Error('captcha_key missing');
@@ -34,7 +34,7 @@ class CapchaService {
         break;
     
       default:
-        throw new Error(`Captcha type: ${captchaType} is not supported`);
+        throw new Error(`Captcha type: ${this.captchaType} is not supported`);
         break;
     }
     this.captcha_service = captcha_service || 'twocaptcha';
