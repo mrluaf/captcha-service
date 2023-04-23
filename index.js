@@ -16,7 +16,9 @@ class CapchaService {
       captchaType,
       websiteURL,
       websiteKey,
+      captchaOptions,
     } = extra_options;
+    this.captchaOptions = captchaOptions || {};
     this.captchaType = captchaType ? captchaType : 'image';
     switch (this.captchaType) {
       case 'image':
@@ -118,7 +120,8 @@ class CapchaService {
                       reject(new Error(`Deathbycaptcha Error: ${(err || '').toString()}`));
                     } else {
                       this.Stream.emit('log', `Deathbycaptcha: ${JSON.stringify(result)}`);
-                      resolve(result.text || '');
+                      const textResult = get(result, 'text', '');
+                      resolve(textResult);
                     }
                   });
                   break;
@@ -126,9 +129,10 @@ class CapchaService {
                 case 'twocaptcha':
                   try {
                     const captchaBASE64 = await imageToBase64(this.imageCaptchaPath);
-                    await this.solver.decode(captchaBASE64, (err, result) => {
+                    await this.solver.decode(captchaBASE64, this.captchaOptions, (err, result) => {
                       this.Stream.emit('log', `TwoCaptcha: ${JSON.stringify(result)}`);
-                      resolve(result.text || '');
+                      const textResult = get(result, 'text', '');
+                      resolve(textResult);
                     });
 
                   } catch (err) {
@@ -145,7 +149,8 @@ class CapchaService {
                           reject(new Error(`anticaptcha Error: ${(err || '').toString()}`));
                         } else {
                           this.Stream.emit('log', `anticaptcha: ${JSON.stringify(result)}`);
-                          resolve(result.text || '');
+                          const textResult = get(result, 'text', '');
+                          resolve(textResult);
                         }
                       });
                     } catch (err) {
@@ -164,7 +169,8 @@ class CapchaService {
                           reject(new Error(`AZCaptcha Error: ${(err || '').toString()}`));
                         } else {
                           this.Stream.emit('log', `AZCaptcha: ${JSON.stringify(result)}`);
-                          resolve(result.text || '');
+                          const textResult = get(result, 'text', '');
+                          resolve(textResult);
                         }
                       });
                     } catch (err) {

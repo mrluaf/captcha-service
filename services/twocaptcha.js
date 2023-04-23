@@ -29,9 +29,10 @@ module.exports.balanceZero = (callback) => {
   }).catch(err => callback(err, null));
 }
 
-module.exports.decode = (captchaBASE64, callback) => {
+module.exports.decode = (captchaBASE64, options = {}, callback) => {
   client.decode({
-    base64: captchaBASE64
+    base64: captchaBASE64,
+    ...options
   }).then(result => {
     callback(null, result);
   }).catch(err => {
