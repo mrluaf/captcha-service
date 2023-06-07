@@ -216,7 +216,7 @@ class CapchaService {
                         reject(new Error(`anticaptcha Error: ${(err || '').toString()}`));
                       } else {
                         this.Stream.emit('log', `anticaptcha: ${JSON.stringify(result)}`);
-                        resolve(result.text || '');
+                        resolve(get(result, 'text', ''));
                       }
                     });
                   } catch (err) {
